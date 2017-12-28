@@ -40,10 +40,6 @@
     "webpack-node-externals": "^1.2.0"
   },
   "dependencies": {
-    "express": "^4.14.0",
-    "react": "^15.2.0",
-    "react-dom": "^15.2.0",
-    "react-router-dom": "^4.2.2",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
@@ -52,6 +48,10 @@
     "morgan": "^1.9.0",
     "pg": "^7.4.0",
     "prettyjson": "^1.2.1",
+    "react": "^15.2.0",
+    "react-cookie": "^2.1.2",
+    "react-dom": "^15.2.0",
+    "react-router-dom": "^4.2.2",
     "sequelize": "^4.28.6"
   }
 }

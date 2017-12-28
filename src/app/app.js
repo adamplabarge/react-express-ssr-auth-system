@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Redirect,
   Route,
@@ -6,6 +7,7 @@ import {
   NavLink,
   Link
 } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
 
 import Home from './home';
 import About from './about';
@@ -13,7 +15,15 @@ import Dashboard from './dashboard';
 import Login from './login';
 import Signup from './signup';
 
-export default class App extends Component {
+class App extends Component {
+  componentWillMount() {
+    const { cookies } = this.props;
+
+    this.state = {
+      user_sid: cookies.get('user_sid') || null
+    }
+  }
+
   render() {
     return (
       <div>
@@ -31,7 +41,7 @@ export default class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/home" component={Home} />
             <Route path="/about" component={About} />
-            <Route path="/dashboard" exact component={Dashboard} />
+            <Route path="/dashboard" exact component={Dashboard}/>
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
           </Switch>
@@ -40,3 +50,9 @@ export default class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  cookies: PropTypes.instanceOf(Cookies).isRequired
+}
+
+export default withCookies(App);

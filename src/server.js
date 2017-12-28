@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import morgan from 'morgan';
+import { CookiesProvider } from 'react-cookie';
+
 
 import React from 'react';
 import { StaticRouter as Router } from 'react-router-dom';
@@ -68,9 +70,11 @@ var sessionChecker = (req, res, next) => {
 app.get('/', sessionChecker, (req, res) => {
     const context = {};
     const appString = renderToString(
-        <Router context={context} location={req.url}>
-            <App />
-        </Router>
+        <CookiesProvider>
+            <Router context={context} location={req.url}>
+                <App />
+            </Router>
+        </CookiesProvider>
     );
     res
         .status(200)
@@ -86,9 +90,11 @@ app.route('/signup')
     .get(sessionChecker, (req, res) => {
         const context = {};
         const appString = renderToString(
-            <Router context={context} location={req.url}>
-                <App />
-            </Router>
+            <CookiesProvider>
+                <Router context={context} location={req.url}>
+                    <App />
+                </Router>
+            </CookiesProvider>
         );
         res
             .status(200)
@@ -118,9 +124,11 @@ app.route('/login')
     .get(sessionChecker, (req, res) => {
         const context = {};
         const appString = renderToString(
-            <Router context={context} location={req.url}>
-                <App />
-            </Router>
+            <CookiesProvider>
+                <Router context={context} location={req.url}>
+                    <App />
+                </Router>
+            </CookiesProvider>
         );
         res
             .status(200)
@@ -152,9 +160,11 @@ app.get('/dashboard', (req, res) => {
     if (req.session.user && req.cookies.user_sid) {
         const context = {};
         const appString = renderToString(
-            <Router context={context} location={req.url}>
-                <App />
-            </Router>
+            <CookiesProvider>
+                <Router context={context} location={req.url}>
+                    <App />
+                </Router>
+            </CookiesProvider>
         );
         res
             .status(200)
