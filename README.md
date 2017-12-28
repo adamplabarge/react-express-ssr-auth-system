@@ -1,0 +1,1 @@
+A simple boilder plate for React, Express, SSR (Server Side Rendering) authentication system.  A combination of (https://github.com/Roilan/react-server-boilerplate) and (https://www.codementor.io/emjay/how-to-build-a-simple-session-based-authentication-system-with-nodejs-from-scratch-6vn67mcy3)
