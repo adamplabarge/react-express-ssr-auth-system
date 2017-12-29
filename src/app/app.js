@@ -42,7 +42,7 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/home" component={Home} />
             <Route path="/about" component={About} />
-            <Route path="/dashboard" exact component={Dashboard}/>
+            <PrivateRoute path="/dashboard" exact user_sid={user_sid} component={Dashboard}/>
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
           </Switch>
@@ -52,18 +52,14 @@ class App extends Component {
   }
 }
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRoute = ({ component: Component, user_sid: user_sid, ...rest }) => (
   <Route render={props => (
-    isAuthenticated() ? (
+    user_sid ? (
       <Component {...props}/>
     ) : (
       <Redirect to="/login"/>
     )
   )}/>
 )
-
-const isAuthenticated = () => {
-  return false;
-}
 
 export default App;
