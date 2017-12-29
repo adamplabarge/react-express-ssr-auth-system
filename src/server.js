@@ -3,8 +3,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import morgan from 'morgan';
-import { CookiesProvider } from 'react-cookie';
-
+import cookiesMiddleware from 'universal-cookie-express';
 
 import React from 'react';
 import { StaticRouter as Router } from 'react-router-dom';
@@ -34,6 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // initialize cookie-parser to allow us access the cookies stored in the browser. 
 app.use(cookieParser());
 
+
 // initialize express-session to allow us track the logged-in user across sessions.
 app.use(session({
     key: 'user_sid',
@@ -41,7 +41,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 600000
+        httpOnly: false
     }
 }));
 
@@ -69,18 +69,20 @@ var sessionChecker = (req, res, next) => {
 // route for Home-Page
 app.get('/', sessionChecker, (req, res) => {
     const context = {};
+    const initialState = {
+        user_sid: req.cookies.user_sid
+    };
     const appString = renderToString(
-        <CookiesProvider>
-            <Router context={context} location={req.url}>
-                <App />
-            </Router>
-        </CookiesProvider>
+        <Router context={context} location={req.url}>
+            <App {...initialState}/>
+        </Router>
     );
     res
         .status(200)
         .send(template({
             body: appString,
-            title: 'Home Page'
+            title: 'Home Page',
+            initialState: JSON.stringify(initialState)
         }));
 });
 
@@ -89,18 +91,20 @@ app.get('/', sessionChecker, (req, res) => {
 app.route('/signup')
     .get(sessionChecker, (req, res) => {
         const context = {};
+        const initialState = {
+            user_sid: req.cookies.user_sid
+        };
         const appString = renderToString(
-            <CookiesProvider>
-                <Router context={context} location={req.url}>
-                    <App />
-                </Router>
-            </CookiesProvider>
+            <Router context={context} location={req.url}>
+                <App {...initialState}/>
+            </Router>
         );
         res
             .status(200)
             .send(template({
                 body: appString,
-                title: 'Signup Page'
+                title: 'Signup Page',
+                initialState: JSON.stringify(initialState)
             }));
     })
     .post((req, res) => {
@@ -123,18 +127,20 @@ app.route('/signup')
 app.route('/login')
     .get(sessionChecker, (req, res) => {
         const context = {};
+        const initialState = {
+            user_sid: req.cookies.user_sid
+        };
         const appString = renderToString(
-            <CookiesProvider>
-                <Router context={context} location={req.url}>
-                    <App />
-                </Router>
-            </CookiesProvider>
+            <Router context={context} location={req.url}>
+                <App {...initialState}/>
+            </Router>
         );
         res
             .status(200)
             .send(template({
                 body: appString,
-                title: 'Login Page'
+                title: 'Login Page',
+                initialState: JSON.stringify(initialState)
             }));
     })
     .post((req, res) => {
@@ -159,18 +165,20 @@ app.route('/login')
 app.get('/dashboard', (req, res) => {
     if (req.session.user && req.cookies.user_sid) {
         const context = {};
+        const initialState = {
+            user_sid: req.cookies.user_sid
+        };
         const appString = renderToString(
-            <CookiesProvider>
-                <Router context={context} location={req.url}>
-                    <App />
-                </Router>
-            </CookiesProvider>
+            <Router context={context} location={req.url}>
+                <App {...initialState}/>
+            </Router>
         );
         res
             .status(200)
             .send(template({
                 body: appString,
-                title: 'Dashboard Page'
+                title: 'Dashboard Page',
+                initialState: JSON.stringify(initialState)
             }));
     } else {
         res.redirect('/login');

@@ -7,7 +7,7 @@ import {
   NavLink,
   Link
 } from 'react-router-dom';
-import { withCookies, Cookies } from 'react-cookie';
+import Cookies from 'universal-cookie';
 
 import Home from './home';
 import About from './about';
@@ -16,15 +16,15 @@ import Login from './login';
 import Signup from './signup';
 
 class App extends Component {
-  componentWillMount() {
-    const { cookies } = this.props;
-
+  constructor(props) {
+    super(props);
     this.state = {
-      user_sid: cookies.get('user_sid') || null
-    }
+      user_sid: props.user_sid
+    };
   }
 
   render() {
+    const user_sid = this.state.user_sid;
     return (
       <div>
         <header className="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
@@ -37,6 +37,7 @@ class App extends Component {
           </nav>
         </header>
         <main>
+          <p>The user_sid is: {user_sid ? user_sid : 'none'}.</p>
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/home" component={Home} />
@@ -51,8 +52,18 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  cookies: PropTypes.instanceOf(Cookies).isRequired
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route render={props => (
+    isAuthenticated() ? (
+      <Component {...props}/>
+    ) : (
+      <Redirect to="/login"/>
+    )
+  )}/>
+)
+
+const isAuthenticated = () => {
+  return false;
 }
 
-export default withCookies(App);
+export default App;
